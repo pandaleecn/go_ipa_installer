@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install iOS App</title>
+  <script>
+    async function installApp() {
+      const version = document.getElementById("version").value;
+      const build = document.getElementById("build").value;
+
+      const response = await fetch("http://localhost:9001", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ version, build }),
+      });
+
+      if (response.ok) {
+        alert("App installed successfully");
+      } else {
+        alert("Error installing app");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Install iOS App</h1>
+  <div>
+    <label for="version">Version:</label>
+    <input type="text" id="version" name="version" required>
+  </div>
+  <div>
+    <label for="build">Build:</label>
+    <input type="text" id="build" name="build" required>
+  </div>
+  <button onclick="installApp()">Install</button>
+</body>
+</html>
