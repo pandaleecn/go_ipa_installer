@@ -59,8 +59,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	version := payload.Version
 	build := payload.Build
 
-	fmt.Println("payload.Version:", payload.Version)
-	fmt.Println("payload.Build:", payload.Build)
+	// fmt.Println("payload.Version:", payload.Version)
+	// fmt.Println("payload.Build:", payload.Build)
 
 	if version == "" || build == "" {
 		http.Error(w, "Missing version or build", http.StatusBadRequest)
@@ -78,8 +78,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get device ID using idevice_id
-	cmd := createCommandWithEnv("idevice_id", "-l")
-	deviceIDOutput, err := cmd.Output()
+	deviceIDOutput, err := exec.Command("idevice_id", "-l").Output()
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error getting device ID: %v", err), http.StatusInternalServerError)
 		return
@@ -92,7 +91,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Install the app using ideviceinstaller
-	cmd = createCommandWithEnv("ideviceinstaller", "-u", deviceID, "-i", ipaFile)
+	cmd := exec.Command("ideviceinstaller", "-u", deviceID, "-i", ipaFile)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Error executing ideviceinstaller: %v", err)
@@ -101,12 +100,6 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "App installed successfully: %s", output)
-}
-
-func createCommandWithEnv(name string, arg ...string) *exec.Cmd {
-	cmd := exec.Command(name, arg...)
-	cmd.Env = append(os.Environ(), "PATH=/usr/local/bin:/opt/homebrew/bin:"+os.Getenv("PATH"))
-	return cmd
 }
 
 func downloadFile(filepath string, url string) error {

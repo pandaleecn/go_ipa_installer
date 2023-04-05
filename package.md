@@ -9,6 +9,8 @@ go build -o go_ipa_installer main.go
 创建一个 GitHub 仓库，将编译好的二进制文件和其他依赖项（如 ideviceinstaller 和 idevice_id）添加到该仓库。这将允许 Homebrew 从 GitHub 仓库下载这些文件。
 在仓库根目录下创建一个名为 go-ipa-installer.rb 的 Homebrew Formula 文件，其中包含以下内容：
 
+shasum -a 256 homebrew-go_ipa_installer-1.0.0.tar.gz
+
 ```ruby
 class GoIpaInstaller < Formula
   desc "Go IPA Installer service for installing iOS apps over HTTP"
@@ -59,7 +61,7 @@ end
 ```sh
 brew tap pandaleecn/go_ipa_installer # Replace 'pandaleecn' and 'go_ipa_installer' with the appropriate values
 brew install go-ipa-installer
-sudo brew services start go-ipa-installer
+brew services start go-ipa-installer
 ```
 
 现在，您的 Go 服务将在 9001 端口上监听 HTTP 请求并处理 IPA 安装。
