@@ -59,7 +59,7 @@ end
 ```sh
 brew tap pandaleecn/go_ipa_installer # Replace 'pandaleecn' and 'go_ipa_installer' with the appropriate values
 brew install go-ipa-installer
-brew services start go-ipa-installer
+sudo brew services start go-ipa-installer
 ```
 
 现在，您的 Go 服务将在 9001 端口上监听 HTTP 请求并处理 IPA 安装。
