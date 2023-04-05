@@ -19,12 +19,6 @@ type Payload struct {
 }
 
 func main() {
-	// 获取当前环境变量
-	originalPath := os.Getenv("PATH")
-
-	// 将 /usr/local/bin 和 /opt/homebrew/bin 路径添加到 PATH
-	os.Setenv("PATH", "/usr/local/bin:/opt/homebrew/bin:"+originalPath)
-		
 	http.HandleFunc("/", handleRequest)
 	log.Fatal(http.ListenAndServe(":9001", nil))
 }
@@ -84,7 +78,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get device ID using idevice_id
-	deviceIDOutput, err := exec.Command("idevice_id", "-l").Output()
+	cmd := createCommandWithEnv("idevice_id", "-l")
+	deviceIDOutput, err := cmd.Output()
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error getting device ID: %v", err), http.StatusInternalServerError)
 		return
@@ -97,7 +92,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Install the app using ideviceinstaller
-	cmd := exec.Command("ideviceinstaller", "-u", deviceID, "-i", ipaFile)
+	cmd = createCommandWithEnv("ideviceinstaller", "-u", deviceID, "-i", ipaFile)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Error executing ideviceinstaller: %v", err)
@@ -106,6 +101,12 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "App installed successfully: %s", output)
+}
+
+func createCommandWithEnv(name string, arg ...string) *exec.Cmd {
+	cmd := exec.Command(name, arg...)
+	cmd.Env = append(os.Environ(), "PATH=/usr/local/bin:/opt/homebrew/bin:"+os.Getenv("PATH"))
+	return cmd
 }
 
 func downloadFile(filepath string, url string) error {
