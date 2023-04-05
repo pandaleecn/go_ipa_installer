@@ -18,6 +18,11 @@ type Payload struct {
 	Build   string `json:"build"`
 }
 
+type Response struct {
+    Code    int    `json:"code"`
+    Message string `json:"message"`
+}
+
 func main() {
 
 	// 获取当前环境变量
@@ -105,8 +110,20 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("Error installing app: %s", output), http.StatusInternalServerError)
 		return
 	}
-
-	fmt.Fprintf(w, "App installed successfully: %s", output)
+	
+	// 处理安装请求
+    response := Response{
+        Code:    200,
+        Message: fmt.Sprintf("App installed successfully: %s", output),
+    }
+    json, err := json.Marshal(response)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(response.Code)
+    w.Write(json)
 }
 
 func downloadFile(filepath string, url string) error {
