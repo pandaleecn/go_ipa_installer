@@ -2,7 +2,7 @@ class GoIpaInstaller < Formula
   desc "Go IPA Installer service for installing iOS apps over HTTP"
   homepage "https://github.com/pandaleecn/go_ipa_installer" # Replace 'pandaleecn' with your actual GitHub username
   url "https://github.com/pandaleecn/go_ipa_installer/archive/refs/tags/v1.0.0.tar.gz" # Replace with the correct URL to the tarball of the release
-  sha256 "ac277924a4f27308058cdd5f6f4bd3f4399f1caefa4f73836359a2459b032a2e"
+  sha256 "5aa86864b0298886f0cb604c892821a032fadc3444d2ea5f02848eb7968f7a15"
   license "MIT"
 
   depends_on "go" => :build
