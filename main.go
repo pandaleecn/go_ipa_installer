@@ -19,6 +19,12 @@ type Payload struct {
 }
 
 func main() {
+	// 获取当前环境变量
+	originalPath := os.Getenv("PATH")
+
+	// 将 /usr/local/bin 和 /opt/homebrew/bin 路径添加到 PATH
+	os.Setenv("PATH", "/usr/local/bin:/opt/homebrew/bin:"+originalPath)
+		
 	http.HandleFunc("/", handleRequest)
 	log.Fatal(http.ListenAndServe(":9001", nil))
 }
