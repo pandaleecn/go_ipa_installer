@@ -55,14 +55,9 @@ end
 创建一个 Homebrew tap，然后将 go-ipa-installer.rb Formula 文件添加到 tap 中。
 使用以下命令安装您的 Go 服务：
 
-```sh
-brew tap yourusername/yourtap # Replace 'yourusername' and 'yourtap' with the appropriate values
-brew install go-ipa-installer
 经过这些步骤后，您的 Go 服务和所需的工具都将通过 Homebrew 安装在用户的系统上。同时，服务将在系统启动时自动运行。以下是在终端中安装和启动服务的命令：
-```
-
 ```sh
-brew tap yourusername/yourtap # Replace 'yourusername' and 'yourtap' with the appropriate values
+brew tap pandaleecn/go_ipa_installer # Replace 'pandaleecn' and 'go_ipa_installer' with the appropriate values
 brew install go-ipa-installer
 brew services start go-ipa-installer
 ```
